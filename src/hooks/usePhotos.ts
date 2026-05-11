@@ -4,7 +4,8 @@ import { GetPhotosQuery } from '../graphql/types/types';
 import { toImageDetail } from '../mappers/toImageDetail';
 
 export const usePhotos = () => {
-  const { data, loading, error } = useQuery<GetPhotosQuery>(GET_PHOTOS);
+  const { data, loading, error, refetch } =
+    useQuery<GetPhotosQuery>(GET_PHOTOS);
 
   const images =
     data?.users.flatMap(user =>
@@ -13,5 +14,5 @@ export const usePhotos = () => {
       ),
     ) ?? [];
 
-  return { images, loading, error };
+  return { images, loading, error, refetch };
 };

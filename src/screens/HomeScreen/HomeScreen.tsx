@@ -1,4 +1,10 @@
-import { View, Text, FlatList, ActivityIndicator } from 'react-native';
+import {
+  View,
+  Text,
+  FlatList,
+  ActivityIndicator,
+  RefreshControl,
+} from 'react-native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { ImageDetail, RootStackParamList } from '../../types';
 import { ScreenIdentifier } from '../../utils/navigationConstants';
@@ -7,6 +13,7 @@ import { usePhotos } from '../../hooks/usePhotos';
 import ScreenContainer from '../../components/ScreenContainer';
 import CardImage from './CardImage';
 import styles from './styles';
+import { useCallback, useState } from 'react';
 
 type Nav = NativeStackNavigationProp<
   RootStackParamList,
@@ -15,7 +22,27 @@ type Nav = NativeStackNavigationProp<
 
 function HomeScreen() {
   const navigation = useNavigation<Nav>();
-  const { images, loading, error } = usePhotos();
+  const { images, loading, error, refetch } = usePhotos();
+  const [refreshing, setRefreshing] = useState(false);
+
+  function handleImagePress(image: ImageDetail) {
+    navigation.navigate(ScreenIdentifier.imageDetailScreen, {
+      imageDetail: image,
+    });
+  }
+
+  function handleImageLike(image: ImageDetail) {}
+
+  const onRefresh = useCallback(async () => {
+    setRefreshing(true);
+    try {
+      await refetch();
+    } catch (e) {
+      console.log('Refresh error:', e);
+    } finally {
+      setRefreshing(false);
+    }
+  }, [refetch]);
 
   if (loading) {
     return (
@@ -32,14 +59,6 @@ function HomeScreen() {
       </View>
     );
   }
-
-  function handleImagePress(image: ImageDetail) {
-    navigation.navigate(ScreenIdentifier.imageDetailScreen, {
-      imageDetail: image,
-    });
-  }
-
-  function handleImageLike(image: ImageDetail) {}
 
   return (
     <ScreenContainer>
@@ -61,6 +80,8 @@ function HomeScreen() {
             onLike={() => handleImageLike(item)}
           />
         )}
+        refreshing={refreshing}
+        onRefresh={onRefresh}
       />
     </ScreenContainer>
   );
