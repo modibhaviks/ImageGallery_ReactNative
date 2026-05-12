@@ -1,14 +1,17 @@
-import { StatusBar, StyleSheet, useColorScheme, View } from 'react-native';
-import {
-  SafeAreaProvider,
-  useSafeAreaInsets,
-} from 'react-native-safe-area-context';
+import { StatusBar, useColorScheme } from 'react-native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer } from '@react-navigation/native';
 import { RootStackParamList } from './src/types';
 import { ScreenIdentifier, ScreenTitle } from './src/utils/navigationConstants';
 import { ApolloProvider } from '@apollo/client/react';
 import { client } from './src/graphql/client/apolloClient';
+
+import { Provider } from 'react-redux';
+import { PersistGate } from 'redux-persist/integration/react';
+import { store, persistor } from './src/redux/store';
+import { useSelector } from 'react-redux';
+import { RootState } from './src/redux/store';
 
 /// Import Screens
 import RegistrationScreen from './src/screens/RegistrationScreen/RegistrationScreen';
@@ -21,24 +24,35 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 
 function App() {
   const isDarkMode = useColorScheme() === 'dark';
-
   return (
-    <ApolloProvider client={client}>
-      <SafeAreaProvider>
-        <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-        <AppContent />
-      </SafeAreaProvider>
-    </ApolloProvider>
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
+        <ApolloProvider client={client}>
+          <SafeAreaProvider>
+            <StatusBar
+              barStyle={isDarkMode ? 'light-content' : 'dark-content'}
+            />
+            <AppContent />
+          </SafeAreaProvider>
+        </ApolloProvider>
+      </PersistGate>
+    </Provider>
   );
 }
 
 function AppContent() {
-  const safeAreaInsets = useSafeAreaInsets();
+  const loggedInUser = useSelector(
+    (state: RootState) => state.auth.loggedInUser,
+  );
 
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName={ScreenIdentifier.loginScreen}
+        initialRouteName={
+          loggedInUser
+            ? ScreenIdentifier.homeScreen
+            : ScreenIdentifier.loginScreen
+        }
         screenOptions={{
           headerBackButtonDisplayMode: 'minimal',
           headerTransparent: true,
@@ -61,6 +75,7 @@ function AppContent() {
           component={HomeScreen}
           options={{
             title: ScreenTitle.home,
+            headerBackVisible: false,
           }}
         />
         <Stack.Screen

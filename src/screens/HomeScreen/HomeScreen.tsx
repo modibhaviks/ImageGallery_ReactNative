@@ -1,10 +1,11 @@
 import {
+  TouchableOpacity,
   View,
   Text,
   FlatList,
   ActivityIndicator,
-  RefreshControl,
 } from 'react-native';
+import { useCallback, useLayoutEffect, useState } from 'react';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { ImageDetail, RootStackParamList } from '../../types';
 import { ScreenIdentifier } from '../../utils/navigationConstants';
@@ -13,7 +14,10 @@ import { usePhotos } from '../../hooks/usePhotos';
 import ScreenContainer from '../../components/ScreenContainer';
 import CardImage from './CardImage';
 import styles from './styles';
-import { useCallback, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { logoutUser } from '../../redux/slices/authSlice';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import { TextStyles } from '../../theme/theme';
 
 type Nav = NativeStackNavigationProp<
   RootStackParamList,
@@ -21,6 +25,7 @@ type Nav = NativeStackNavigationProp<
 >;
 
 function HomeScreen() {
+  const dispatch = useDispatch();
   const navigation = useNavigation<Nav>();
   const { images, loading, error, refetch } = usePhotos();
   const [refreshing, setRefreshing] = useState(false);
@@ -32,6 +37,25 @@ function HomeScreen() {
   }
 
   function handleImageLike(image: ImageDetail) {}
+
+  function handleLogout() {
+    dispatch(logoutUser());
+    navigation.replace(ScreenIdentifier.loginScreen);
+  }
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <TouchableOpacity onPress={handleLogout}>
+          <Ionicons
+            name={'log-out-outline'}
+            size={22}
+            color={TextStyles.body.color}
+          />
+        </TouchableOpacity>
+      ),
+    });
+  }, [navigation]);
 
   const onRefresh = useCallback(async () => {
     setRefreshing(true);

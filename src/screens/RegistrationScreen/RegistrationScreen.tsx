@@ -9,6 +9,9 @@ import { useRegistrationFormValidation } from '../../hooks/useRegistrationFormVa
 import { RootStackParamList } from '../../types';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
+import { useDispatch } from 'react-redux';
+import { registerUser } from '../../redux/slices/authSlice';
+
 type Nav = NativeStackNavigationProp<
   RootStackParamList,
   typeof ScreenIdentifier.registrationScreen
@@ -16,10 +19,20 @@ type Nav = NativeStackNavigationProp<
 
 function RegistrationScreen() {
   const navigation = useNavigation<Nav>();
+  const dispatch = useDispatch();
+
   const { values, errors, touched, setFieldValue, handleBlur, isValid } =
     useRegistrationFormValidation();
 
   function onRegister() {
+    dispatch(
+      registerUser({
+        name: values.name,
+        email: values.email,
+        phone: values.phone,
+        password: values.password,
+      }),
+    );
     navigation.navigate(ScreenIdentifier.homeScreen as never);
   }
 
@@ -69,6 +82,7 @@ function RegistrationScreen() {
         keyboardType="default"
         autoCapitalize="none"
         autoCorrect={false}
+        isPassword={true}
         value={values.password}
         onChangeText={text => setFieldValue('password', text)}
         onBlur={() => handleBlur('password')}

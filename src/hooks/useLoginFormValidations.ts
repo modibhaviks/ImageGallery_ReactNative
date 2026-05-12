@@ -16,8 +16,8 @@ type Errors = {
 
 export const useLoginFormValidation = () => {
   const [values, setValues] = useState<Fields>({
-    email: 'abc@xyz.com',
-    password: 'password@123',
+    email: '',
+    password: '',
   });
 
   const [errors, setErrors] = useState<Errors>({
