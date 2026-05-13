@@ -7,7 +7,7 @@ import {
   View,
 } from 'react-native';
 
-const CardImage = ({ item, style, onPress, onLike }: any) => {
+const CardImage = ({ item, style, onPress, onLike, liked }: any) => {
   const heartScale = React.useRef(new Animated.Value(1)).current;
 
   const handleLike = () => {
@@ -50,7 +50,7 @@ const CardImage = ({ item, style, onPress, onLike }: any) => {
                 alignSelf: 'flex-start',
               }}
             >
-              <Text style={styles.likes}>{item.liked ? '❤️' : '🤍'}</Text>
+              <Text style={styles.likes}>{liked ? '❤️' : '🤍'}</Text>
             </Animated.View>
           </TouchableOpacity>
         </View>

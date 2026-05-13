@@ -14,10 +14,13 @@ import { usePhotos } from '../../hooks/usePhotos';
 import ScreenContainer from '../../components/ScreenContainer';
 import CardImage from './CardImage';
 import styles from './styles';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { logoutUser } from '../../redux/slices/authSlice';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { TextStyles } from '../../theme/theme';
+
+import { RootState } from '../../redux/store';
+import { toggleLike } from '../../redux/slices/likesSlice';
 
 type Nav = NativeStackNavigationProp<
   RootStackParamList,
@@ -30,13 +33,19 @@ function HomeScreen() {
   const { images, loading, error, refetch } = usePhotos();
   const [refreshing, setRefreshing] = useState(false);
 
+  const likedImages = useSelector(
+    (state: RootState) => state.likes.likedImages,
+  );
+
   function handleImagePress(image: ImageDetail) {
     navigation.navigate(ScreenIdentifier.imageDetailScreen, {
       imageDetail: image,
     });
   }
 
-  function handleImageLike(image: ImageDetail) {}
+  function handleImageLike(image: ImageDetail) {
+    dispatch(toggleLike(image.id));
+  }
 
   function handleLogout() {
     dispatch(logoutUser());
@@ -49,7 +58,7 @@ function HomeScreen() {
         <TouchableOpacity onPress={handleLogout}>
           <Ionicons
             name={'log-out-outline'}
-            size={22}
+            size={24}
             color={TextStyles.body.color}
           />
         </TouchableOpacity>
@@ -96,14 +105,17 @@ function HomeScreen() {
         updateCellsBatchingPeriod={50}
         columnWrapperStyle={{ justifyContent: 'space-between' }}
         keyExtractor={(item: ImageDetail) => item.id}
-        renderItem={({ item }) => (
-          <CardImage
-            item={item}
-            liked={false}
-            onPress={() => handleImagePress(item)}
-            onLike={() => handleImageLike(item)}
-          />
-        )}
+        renderItem={({ item }) => {
+          const isLiked = likedImages.includes(item.id);
+          return (
+            <CardImage
+              item={item}
+              liked={isLiked}
+              onPress={() => handleImagePress(item)}
+              onLike={() => handleImageLike(item)}
+            />
+          );
+        }}
         refreshing={refreshing}
         onRefresh={onRefresh}
       />

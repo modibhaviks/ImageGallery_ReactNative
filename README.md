@@ -1,97 +1,93 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+---
 
-# Getting Started
+# ImageGallery
 
-> **Note**: Make sure you have completed the [Set Up Your Environment](https://reactnative.dev/docs/set-up-your-environment) guide before proceeding.
+A modern React Native app to browse, like, and view details of images, with authentication and device info features.
 
-## Step 1: Start Metro
+## Table of Contents
+- [Features](#features)
+- [Project Structure](#project-structure)
+- [Tech Stack](#tech-stack)
+- [Getting Started](#getting-started)
+- [Development](#development)
+- [Troubleshooting](#troubleshooting)
+- [Contributing](#contributing)
 
-First, you will need to run **Metro**, the JavaScript build tool for React Native.
+## Features
+- Browse a gallery of images fetched via GraphQL
+- Like/unlike images (global state with Redux Toolkit)
+- View image details
+- User authentication (login/registration)
+- Device details screen (native integration)
 
-To start the Metro dev server, run the following command from the root of your React Native project:
-
-```sh
-# Using npm
-npm start
-
-# OR using Yarn
-yarn start
+## Project Structure
+```
+src/
+  components/        # Reusable UI components
+  graphql/           # Apollo client, queries, types
+  hooks/             # Custom React hooks (e.g., usePhotos)
+  mappers/           # Data transformation utilities
+  native/            # Native modules/interfaces
+  screens/           # App screens (Home, ImageDetail, Login, Registration, DeviceDetails)
+  theme/             # Theming and styles
+  types/             # TypeScript types
+  utils/             # Utility functions/constants
 ```
 
-## Step 2: Build and run your app
+## Tech Stack
+- React Native
+- TypeScript
+- Apollo Client (GraphQL)
+- Redux Toolkit & React Redux
+- React Navigation
 
-With Metro running, open a new terminal window/pane from the root of your React Native project, and use one of the following commands to build and run your Android or iOS app:
+## Getting Started
+1. **Install dependencies**
+   ```sh
+   npm install
+   # or
+   yarn install
+   ```
+2. **Start Metro bundler**
+   ```sh
+   npm start
+   # or
+   yarn start
+   ```
+3. **Run on Android**
+   ```sh
+   npm run android
+   # or
+   yarn android
+   ```
+4. **Run on iOS**
+   - Install CocoaPods dependencies (first time or after native deps change):
+     ```sh
+     bundle install
+     bundle exec pod install
+     ```
+   - Then run:
+     ```sh
+     npm run ios
+     # or
+     yarn ios
+     ```
 
-### Android
+## Development
+- Edit screens/components in `src/`
+- Add GraphQL queries in `src/graphql/queries/`
+- Add Redux slices in `src/store/`
+- Use Fast Refresh for instant updates
 
-```sh
-# Using npm
-npm run android
+## Troubleshooting
+- See the [React Native Troubleshooting Guide](https://reactnative.dev/docs/troubleshooting)
+- For environment setup, see [React Native Docs](https://reactnative.dev/docs/environment-setup)
 
-# OR using Yarn
-yarn android
-```
+## Contributing
+1. Fork the repo
+2. Create your feature branch (`git checkout -b feature/YourFeature`)
+3. Commit your changes
+4. Push to the branch
+5. Open a Pull Request
 
-### iOS
-
-For iOS, remember to install CocoaPods dependencies (this only needs to be run on first clone or after updating native deps).
-
-The first time you create a new project, run the Ruby bundler to install CocoaPods itself:
-
-```sh
-bundle install
-```
-
-Then, and every time you update your native dependencies, run:
-
-```sh
-bundle exec pod install
-```
-
-For more information, please visit [CocoaPods Getting Started guide](https://guides.cocoapods.org/using/getting-started.html).
-
-```sh
-# Using npm
-npm run ios
-
-# OR using Yarn
-yarn ios
-```
-
-If everything is set up correctly, you should see your new app running in the Android Emulator, iOS Simulator, or your connected device.
-
-This is one way to run your app — you can also build it directly from Android Studio or Xcode.
-
-## Step 3: Modify your app
-
-Now that you have successfully run the app, let's make changes!
-
-Open `App.tsx` in your text editor of choice and make some changes. When you save, your app will automatically update and reflect these changes — this is powered by [Fast Refresh](https://reactnative.dev/docs/fast-refresh).
-
-When you want to forcefully reload, for example to reset the state of your app, you can perform a full reload:
-
-- **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Dev Menu**, accessed via <kbd>Ctrl</kbd> + <kbd>M</kbd> (Windows/Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (macOS).
-- **iOS**: Press <kbd>R</kbd> in iOS Simulator.
-
-## Congratulations! :tada:
-
-You've successfully run and modified your React Native App. :partying_face:
-
-### Now what?
-
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [docs](https://reactnative.dev/docs/getting-started).
-
-# Troubleshooting
-
-If you're having issues getting the above steps to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
-
-# Learn More
-
-To learn more about React Native, take a look at the following resources:
-
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+---
