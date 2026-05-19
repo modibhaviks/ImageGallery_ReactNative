@@ -5,21 +5,34 @@ import { combineReducers } from 'redux';
 
 import authReducer from './slices/authSlice';
 import likesReducer from './slices/likesSlice';
+import { encryptTransform } from 'redux-persist-transform-encrypt';
 
-const persistConfig = {
-  key: 'root',
+/// Store Auth in encrypted form and Likes in plain form (as they are not sensitive)
+const authPersistConfig = {
+  key: 'auth',
+  storage: AsyncStorage,
+  transforms: [
+    encryptTransform({
+      secretKey: 'imageGallery@#$xo93',
+      onError: error => {
+        console.log(error);
+      },
+    }),
+  ],
+};
+
+const likesPersistConfig = {
+  key: 'likes',
   storage: AsyncStorage,
 };
 
 const rootReducer = combineReducers({
-  auth: authReducer,
-  likes: likesReducer,
+  auth: persistReducer(authPersistConfig, authReducer),
+  likes: persistReducer(likesPersistConfig, likesReducer),
 });
 
-const persistedReducer = persistReducer(persistConfig, rootReducer);
-
 export const store = configureStore({
-  reducer: persistedReducer,
+  reducer: rootReducer,
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({
       serializableCheck: false,

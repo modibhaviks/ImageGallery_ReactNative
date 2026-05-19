@@ -4,6 +4,7 @@ import {
   Text,
   FlatList,
   ActivityIndicator,
+  Image,
 } from 'react-native';
 import { useCallback, useLayoutEffect, useState } from 'react';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -21,6 +22,7 @@ import { TextStyles } from '../../theme/theme';
 
 import { RootState } from '../../redux/store';
 import { toggleLike } from '../../redux/slices/likesSlice';
+import { preloadAndNavigate } from '../../utils/imagePreload';
 
 type Nav = NativeStackNavigationProp<
   RootStackParamList,
@@ -37,20 +39,22 @@ function HomeScreen() {
     (state: RootState) => state.likes.likedImages,
   );
 
-  function handleImagePress(image: ImageDetail) {
-    navigation.navigate(ScreenIdentifier.imageDetailScreen, {
-      imageDetail: image,
+  const handleImagePress = (image: ImageDetail) => {
+    preloadAndNavigate(image.imageUrl, () => {
+      navigation.navigate(ScreenIdentifier.imageDetailScreen, {
+        imageDetail: image,
+      });
     });
-  }
+  };
 
-  function handleImageLike(image: ImageDetail) {
+  const handleImageLike = (image: ImageDetail) => {
     dispatch(toggleLike(image.id));
-  }
+  };
 
-  function handleLogout() {
+  const handleLogout = () => {
     dispatch(logoutUser());
     navigation.replace(ScreenIdentifier.loginScreen);
-  }
+  };
 
   useLayoutEffect(() => {
     navigation.setOptions({

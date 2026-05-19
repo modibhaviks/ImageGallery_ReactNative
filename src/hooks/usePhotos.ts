@@ -1,11 +1,13 @@
 import { useQuery } from '@apollo/client/react';
 import { GET_PHOTOS } from '../graphql/queries/photos';
 import { GetPhotosQuery } from '../graphql/types/types';
-import { toImageDetail } from '../mappers/toImageDetail';
+import { toImageDetail } from '../utils/toImageDetail';
 
 export const usePhotos = () => {
-  const { data, loading, error, refetch } =
-    useQuery<GetPhotosQuery>(GET_PHOTOS);
+  const { data, loading, error, refetch } = useQuery<GetPhotosQuery>(
+    GET_PHOTOS,
+    { fetchPolicy: 'cache-and-network' },
+  );
 
   const images =
     data?.users.flatMap(user =>
