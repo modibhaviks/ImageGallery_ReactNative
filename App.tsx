@@ -1,4 +1,7 @@
-import { StatusBar, useColorScheme } from 'react-native';
+import './src/i18n';
+import { initLanguage } from './src/i18n/initLanguage';
+
+import { I18nManager, StatusBar, useColorScheme } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer } from '@react-navigation/native';
@@ -19,11 +22,28 @@ import LoginScreen from './src/screens/LoginScreen/LoginScreen';
 import HomeScreen from './src/screens/HomeScreen/HomeScreen';
 import ImageDetailScreen from './src/screens/ImageDetailScreen/ImageDetailScreen';
 import DeviceScreen from './src/screens/DeviceDetails/DeviceDetailsScreen';
+import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import Colors from './src/theme/theme';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 function App() {
   const isDarkMode = useColorScheme() === 'dark';
+  const [appReady, setAppReady] = useState(false);
+
+  useEffect(() => {
+    const bootstrap = async () => {
+      await initLanguage();
+      setAppReady(true);
+    };
+
+    bootstrap();
+  }, []);
+
+  if (!appReady) return null; // or splash screen
+
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
@@ -41,6 +61,7 @@ function App() {
 }
 
 function AppContent() {
+  const { t } = useTranslation();
   const loggedInUser = useSelector(
     (state: RootState) => state.auth.loggedInUser,
   );
@@ -53,10 +74,20 @@ function AppContent() {
             ? ScreenIdentifier.homeScreen
             : ScreenIdentifier.loginScreen
         }
-        screenOptions={{
+        screenOptions={({ navigation }) => ({
           headerBackButtonDisplayMode: 'minimal',
           headerTransparent: true,
-        }}
+          headerLeft: ({ canGoBack }) =>
+            canGoBack ? (
+              <Ionicons
+                name={I18nManager.isRTL ? 'chevron-forward' : 'chevron-back'}
+                size={24}
+                color={Colors.backIconColor}
+                onPress={() => navigation.goBack()}
+                style={{ marginRight: 12 }}
+              />
+            ) : null,
+        })}
       >
         <Stack.Screen
           name={ScreenIdentifier.loginScreen}
@@ -67,14 +98,14 @@ function AppContent() {
           name={ScreenIdentifier.registrationScreen}
           component={RegistrationScreen}
           options={{
-            title: ScreenTitle.registration,
+            title: t('screenTitle.registration'),
           }}
         />
         <Stack.Screen
           name={ScreenIdentifier.homeScreen}
           component={HomeScreen}
           options={{
-            title: ScreenTitle.home,
+            title: t('screenTitle.home'),
             headerBackVisible: false,
           }}
         />
@@ -82,14 +113,14 @@ function AppContent() {
           name={ScreenIdentifier.imageDetailScreen}
           component={ImageDetailScreen}
           options={{
-            title: ScreenTitle.imageDetail,
+            title: t('screenTitle.imageDetail'),
           }}
         />
         <Stack.Screen
           name={ScreenIdentifier.deviceDetailsScreen}
           component={DeviceScreen}
           options={{
-            title: ScreenTitle.deviceDetails,
+            title: t('screenTitle.deviceDetails'),
           }}
         />
       </Stack.Navigator>

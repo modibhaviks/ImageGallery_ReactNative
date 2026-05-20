@@ -11,6 +11,7 @@ const Colors = {
   },
   card: '#cdbdfbff',
   border: '#C8C2E0',
+  backIconColor: '#2C1A5E',
 };
 
 // Text Styles

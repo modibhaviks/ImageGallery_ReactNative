@@ -1,4 +1,4 @@
-import { Text } from 'react-native';
+import { Text, View } from 'react-native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useNavigation } from '@react-navigation/native';
 import ScreenContainer from '../../components/ScreenContainer';
@@ -13,6 +13,10 @@ import { Alert } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { loginUser } from '../../redux/slices/authSlice';
 import { RootState } from '../../redux/store';
+import { useTranslation } from 'react-i18next';
+import i18n from '../../i18n';
+import { setAppLanguage } from '../../i18n/setLanguage';
+import { rtl } from '../../theme/rtlStyles';
 
 type Nav = NativeStackNavigationProp<
   RootStackParamList,
@@ -22,6 +26,7 @@ type Nav = NativeStackNavigationProp<
 function LoginScreen() {
   const navigation = useNavigation<Nav>();
   const dispatch = useDispatch();
+  const { t } = useTranslation();
 
   const users = useSelector((state: RootState) => state.auth.users);
 
@@ -34,6 +39,11 @@ function LoginScreen() {
   }
 
   function onLogin() {
+    if (!users || users.length === 0) {
+      Alert.alert('Login Failed', 'No users found');
+      return;
+    }
+
     const user = users.find(
       item =>
         item.email.trim().toLowerCase() === values.email.trim().toLowerCase() &&
@@ -61,12 +71,24 @@ function LoginScreen() {
     navigation.navigate(ScreenIdentifier.deviceDetailsScreen as never);
   }
 
+  const toggleLanguage = () => {
+    const newLang = i18n.language === 'en' ? 'ar' : 'en';
+    setAppLanguage(newLang);
+  };
+
   return (
     <ScreenContainer>
-      <Text style={[TextStyles.title, { paddingBottom: 30 }]}>Login</Text>
+      <Text
+        style={[
+          TextStyles.title,
+          { textAlign: rtl.textAlign, paddingBottom: 30 },
+        ]}
+      >
+        {t('login')}
+      </Text>
       <CustomTextInput
-        label="Email"
-        placeholder="your@email.com"
+        label={t('email')}
+        placeholder={t('emailPlaceholder')}
         keyboardType="email-address"
         autoCapitalize="none"
         autoCorrect={false}
@@ -76,8 +98,8 @@ function LoginScreen() {
         error={touched.email ? errors.email : ''}
       />
       <CustomTextInput
-        label="Password"
-        placeholder="Enter password"
+        label={t('password')}
+        placeholder={t('passwordPlaceholder')}
         secureTextEntry
         keyboardType="default"
         autoCapitalize="none"
@@ -88,14 +110,29 @@ function LoginScreen() {
         onBlur={() => handleBlur('password')}
         error={touched.password ? errors.password : ''}
       />
-      <CustomButton title="Login" onPress={onLogin} disabled={!isValid} />
-      <CustomButton title="Register" onPress={onRegister} />
+      <CustomButton title={t('login')} onPress={onLogin} disabled={!isValid} />
+      <CustomButton title={t('register')} onPress={onRegister} />
 
       <CustomButton
-        title="Device Details"
+        title={t('deviceDetails')}
         variant="outlined"
         onPress={onDeviceDetails}
       />
+
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'center',
+          marginTop: 20,
+        }}
+      >
+        <CustomButton
+          style={{ flex: 1, alignItems: 'center' }}
+          title={i18n.language === 'en' ? t('arabic') : t('english')}
+          variant="outlined"
+          onPress={toggleLanguage}
+        />
+      </View>
     </ScreenContainer>
   );
 }

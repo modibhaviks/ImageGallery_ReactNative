@@ -1,0 +1,42 @@
+{
+  "login": "Login",
+  "register": "Register",
+  "deviceDetails": "Device Details",
+  "registration": "Registration",
+  "createYourAccount": "Create your account!",
+  "name": "Name",
+  "namePlaceholder": "Enter name",
+  "email": "Email",
+  "emailPlaceholder": "your@email.com",
+  "phoneNumber": "Phone Number",
+  "phoneNumberPlaceholder": "Enter phone number",
+  "password": "Password",
+  "passwordPlaceholder": "Enter password",
+  "home": "Home",
+  "model": "Model",
+  "system": "System",
+  "version": "Version",
+  "english": "English",
+  "arabic": "العربية",
+
+  "screenTitle": {
+    "home": "Home",
+    "deviceDetails": "Device Details",
+    "registration": "Registration",
+    "imageDetail": "Image Detail"
+  },
+
+  "validation": {
+    "nameRequired": "Name is required",
+    "nameInvalid": "Enter valid name",
+
+    "emailRequired": "Email is required",
+    "emailInvalid": "Enter valid email",
+
+    "phoneRequired": "Phone is required",
+    "phoneInvalid": "Enter 10 digit phone number",
+
+    "passwordRequired": "Password is required",
+    "passwordMin": "Min 6 characters required"
+  }
+}

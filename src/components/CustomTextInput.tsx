@@ -10,6 +10,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import Colors, { TextStyles } from '../theme/theme';
 import React, { useState } from 'react';
+import { rtl } from '../theme/rtlStyles';
 
 interface CustomTextInputProps extends TextInputProps {
   label?: string;
@@ -31,11 +32,18 @@ const CustomTextInput: React.FC<CustomTextInputProps> = ({
 
   return (
     <View style={styles.container}>
-      {label && <Text style={[TextStyles.body, styles.label]}>{label}</Text>}
+      {label && (
+        <Text
+          style={[TextStyles.body, { textAlign: rtl.textAlign }, styles.label]}
+        >
+          {label}
+        </Text>
+      )}
 
       <View style={styles.inputContainer}>
         <TextInput
           style={[styles.input, error ? styles.errorInput : null, style]}
+          textAlign={rtl.inputTextAlign}
           placeholderTextColor={TextStyles.inputPlaceholder.color}
           onBlur={onBlur}
           onFocus={onFocus}
@@ -57,7 +65,11 @@ const CustomTextInput: React.FC<CustomTextInputProps> = ({
         )}
       </View>
 
-      {error ? <Text style={styles.errorText}>{error}</Text> : null}
+      {error ? (
+        <Text style={[styles.errorText, { textAlign: rtl.textAlign }]}>
+          {error}
+        </Text>
+      ) : null}
     </View>
   );
 };

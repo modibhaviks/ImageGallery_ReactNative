@@ -11,6 +11,8 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 import { useDispatch } from 'react-redux';
 import { registerUser } from '../../redux/slices/authSlice';
+import { useTranslation } from 'react-i18next';
+import { rtl } from '../../theme/rtlStyles';
 
 type Nav = NativeStackNavigationProp<
   RootStackParamList,
@@ -20,6 +22,7 @@ type Nav = NativeStackNavigationProp<
 function RegistrationScreen() {
   const navigation = useNavigation<Nav>();
   const dispatch = useDispatch();
+  const { t } = useTranslation();
 
   const { values, errors, touched, setFieldValue, handleBlur, isValid } =
     useRegistrationFormValidation();
@@ -38,12 +41,17 @@ function RegistrationScreen() {
 
   return (
     <ScreenContainer>
-      <Text style={[TextStyles.title, { paddingBottom: 30 }]}>
-        Create your account!
+      <Text
+        style={[
+          TextStyles.title,
+          { textAlign: rtl.textAlign, paddingBottom: 30 },
+        ]}
+      >
+        {t('createYourAccount')}
       </Text>
       <CustomTextInput
-        label="Name"
-        placeholder="Enter name"
+        label={t('name')}
+        placeholder={t('namePlaceholder')}
         keyboardType="default"
         autoCapitalize="words"
         value={values.name}
@@ -52,8 +60,8 @@ function RegistrationScreen() {
         error={touched.name ? errors.name : ''}
       />
       <CustomTextInput
-        label="Email"
-        placeholder="your@email.com"
+        label={t('email')}
+        placeholder={t('emailPlaceholder')}
         keyboardType="email-address"
         autoCapitalize="none"
         autoCorrect={false}
@@ -63,8 +71,8 @@ function RegistrationScreen() {
         error={touched.email ? errors.email : ''}
       />
       <CustomTextInput
-        label="Phone Number"
-        placeholder="Enter phone number"
+        label={t('phoneNumber')}
+        placeholder={t('phoneNumberPlaceholder')}
         keyboardType="phone-pad"
         maxLength={10}
         value={values.phone}
@@ -76,8 +84,8 @@ function RegistrationScreen() {
         error={touched.phone ? errors.phone : ''}
       />
       <CustomTextInput
-        label="Password"
-        placeholder="Enter password"
+        label={t('password')}
+        placeholder={t('passwordPlaceholder')}
         secureTextEntry
         keyboardType="default"
         autoCapitalize="none"
@@ -88,7 +96,11 @@ function RegistrationScreen() {
         onBlur={() => handleBlur('password')}
         error={touched.password ? errors.password : ''}
       />
-      <CustomButton title="Register" onPress={onRegister} disabled={!isValid} />
+      <CustomButton
+        title={t('register')}
+        onPress={onRegister}
+        disabled={!isValid}
+      />
     </ScreenContainer>
   );
 }

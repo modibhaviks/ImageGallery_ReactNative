@@ -1,9 +1,17 @@
-import { Pressable, PressableProps, Text, StyleSheet } from 'react-native';
+import {
+  Pressable,
+  PressableProps,
+  Text,
+  StyleSheet,
+  ViewStyle,
+  StyleProp,
+} from 'react-native';
 import Colors, { TextStyles } from '../theme/theme';
 
 type Props = PressableProps & {
   title: string;
   variant?: 'primary' | 'outlined';
+  style?: StyleProp<ViewStyle>;
 };
 
 export default function CustomButton({
@@ -11,6 +19,7 @@ export default function CustomButton({
   onPress,
   disabled,
   variant = 'primary',
+  style,
   ...props
 }: Props) {
   return (
@@ -23,6 +32,7 @@ export default function CustomButton({
         variant === 'outlined' && styles.outlinedButton,
         disabled && styles.buttonDisabled,
         pressed && !disabled && styles.buttonPressed,
+        style,
       ]}
       {...props}
     >

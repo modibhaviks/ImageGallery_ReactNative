@@ -6,6 +6,8 @@ import { ScreenIdentifier } from '../../utils/navigationConstants';
 import { RootStackParamList } from '../../types';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import ScreenContainer from '../../components/ScreenContainer';
+import { useTranslation } from 'react-i18next';
+import { rtl } from '../../theme/rtlStyles';
 
 type Nav = NativeStackNavigationProp<
   RootStackParamList,
@@ -14,6 +16,7 @@ type Nav = NativeStackNavigationProp<
 
 const DeviceScreen = () => {
   const [device, setDevice] = useState<DeviceInfo | null>(null);
+  const { t } = useTranslation();
 
   useEffect(() => {
     loadDeviceInfo();
@@ -27,14 +30,22 @@ const DeviceScreen = () => {
   return (
     <ScreenContainer>
       <View>
-        <Text style={styles.title}>Device Details</Text>
+        <Text style={styles.title}>{t('deviceDetails')}</Text>
 
         {device && (
           <>
-            <Text style={styles.content}>Name: {device.name}</Text>
-            <Text style={styles.content}>Model: {device.model}</Text>
-            <Text style={styles.content}>System: {device.systemName}</Text>
-            <Text style={styles.content}>Version: {device.systemVersion}</Text>
+            <Text style={styles.content}>
+              {t('name')}: {device.name}
+            </Text>
+            <Text style={styles.content}>
+              {t('model')}: {device.model}
+            </Text>
+            <Text style={styles.content}>
+              {t('system')}: {device.systemName}
+            </Text>
+            <Text style={styles.content}>
+              {t('version')}: {device.systemVersion}
+            </Text>
           </>
         )}
       </View>
@@ -48,6 +59,7 @@ const styles = StyleSheet.create({
   content: {
     fontSize: 16,
     padding: 10,
+    textAlign: rtl.textAlign,
   },
   container: {
     flex: 1,
@@ -59,5 +71,6 @@ const styles = StyleSheet.create({
     fontSize: 24,
     marginBottom: 20,
     fontWeight: 'bold',
+    textAlign: rtl.textAlign,
   },
 });

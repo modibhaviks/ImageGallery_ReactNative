@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import { rtl } from '../../theme/rtlStyles';
 
 const CardImage = ({ item, style, onPress, onLike, liked }: any) => {
   const heartScale = React.useRef(new Animated.Value(1)).current;
@@ -35,11 +36,17 @@ const CardImage = ({ item, style, onPress, onLike, liked }: any) => {
         <FadeImage uri={item.imageUrl} />
 
         <View style={styles.content}>
-          <Text style={styles.title} numberOfLines={1}>
+          <Text
+            style={[styles.title, { textAlign: rtl.textAlign }]}
+            numberOfLines={1}
+          >
             {item.title}
           </Text>
 
-          <Text style={styles.subtitle} numberOfLines={1}>
+          <Text
+            style={[styles.subtitle, { textAlign: rtl.textAlign }]}
+            numberOfLines={1}
+          >
             {item.author}
           </Text>
 

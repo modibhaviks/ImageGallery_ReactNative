@@ -5,5 +5,4 @@ export const client = new ApolloClient({
     uri: 'https://graphqlplaceholder.vercel.app/graphql',
   }),
   cache: new InMemoryCache(),
-  fetchPolicy: 'cache-and-network',
 });

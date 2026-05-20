@@ -1,0 +1,41 @@
+{
+  "login": "تسجيل الدخول",
+  "register": "إنشاء حساب",
+  "deviceDetails": "تفاصيل الجهاز",
+  "registration": "التسجيل",
+  "createYourAccount": "أنشئ حسابك!",
+  "name": "الاسم",
+  "namePlaceholder": "أدخل الاسم",
+  "email": "البريد الإلكتروني",
+  "emailPlaceholder": "your@email.com",
+  "phoneNumber": "رقم الهاتف",
+  "phoneNumberPlaceholder": "أدخل رقم الهاتف",
+  "password": "كلمة المرور",
+  "passwordPlaceholder": "أدخل كلمة المرور",
+  "model": "الموديل",
+  "system": "النظام",
+  "version": "الإصدار",
+  "english": "English",
+  "arabic": "العربية",
+
+  "screenTitle": {
+    "home": "الرئيسية",
+    "deviceDetails": "تفاصيل الجهاز",
+    "registration": "التسجيل",
+    "imageDetail": "تفاصيل الصورة"
+  },
+
+  "validation": {
+    "nameRequired": "الاسم مطلوب",
+    "nameInvalid": "أدخل اسماً صحيحاً",
+
+    "emailRequired": "البريد الإلكتروني مطلوب",
+    "emailInvalid": "أدخل بريداً إلكترونياً صحيحاً",
+
+    "phoneRequired": "رقم الهاتف مطلوب",
+    "phoneInvalid": "أدخل رقم هاتف مكون من 10 أرقام",
+
+    "passwordRequired": "كلمة المرور مطلوبة",
+    "passwordMin": "يجب ألا تقل عن 6 أحرف"
+  }
+}
