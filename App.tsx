@@ -74,20 +74,31 @@ function AppContent() {
             ? ScreenIdentifier.homeScreen
             : ScreenIdentifier.loginScreen
         }
-        screenOptions={({ navigation }) => ({
-          headerBackButtonDisplayMode: 'minimal',
-          headerTransparent: true,
-          headerLeft: ({ canGoBack }) =>
-            canGoBack ? (
-              <Ionicons
-                name={I18nManager.isRTL ? 'chevron-forward' : 'chevron-back'}
-                size={24}
-                color={Colors.backIconColor}
-                onPress={() => navigation.goBack()}
-                style={{ marginRight: 12 }}
-              />
-            ) : null,
-        })}
+        screenOptions={({ navigation, route }) => {
+          const hideBackButtonScreens: (keyof RootStackParamList)[] = [
+            ScreenIdentifier.homeScreen,
+          ];
+
+          const shouldHideBackButton = hideBackButtonScreens.includes(
+            route.name,
+          );
+
+          return {
+            headerBackButtonDisplayMode: 'minimal',
+            headerTransparent: true,
+
+            headerLeft: ({ canGoBack }) =>
+              canGoBack && !shouldHideBackButton ? (
+                <Ionicons
+                  name={I18nManager.isRTL ? 'chevron-forward' : 'chevron-back'}
+                  size={24}
+                  color={Colors.backIconColor}
+                  onPress={() => navigation.goBack()}
+                  style={{ marginRight: 12 }}
+                />
+              ) : null,
+          };
+        }}
       >
         <Stack.Screen
           name={ScreenIdentifier.loginScreen}
