@@ -5,7 +5,6 @@ import CustomButton from '../../components/CustomButton';
 import { ScreenIdentifier } from '../../utils/navigationConstants';
 import ScreenContainer from '../../components/ScreenContainer';
 import { TextStyles } from '../../theme/theme';
-import { useRegistrationFormValidation } from '../../hooks/useRegistrationFormValidations';
 import { RootStackParamList } from '../../types';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
@@ -13,21 +12,41 @@ import { useDispatch } from 'react-redux';
 import { registerUser } from '../../redux/slices/authSlice';
 import { useTranslation } from 'react-i18next';
 import { rtl } from '../../theme/rtlStyles';
+import { useForm, Controller } from 'react-hook-form';
+import { validators } from '../../utils/validation';
 
 type Nav = NativeStackNavigationProp<
   RootStackParamList,
   typeof ScreenIdentifier.registrationScreen
 >;
 
+type FormValues = {
+  name: string;
+  email: string;
+  phone: string;
+  password: string;
+};
+
 function RegistrationScreen() {
   const navigation = useNavigation<Nav>();
   const dispatch = useDispatch();
   const { t } = useTranslation();
 
-  const { values, errors, touched, setFieldValue, handleBlur, isValid } =
-    useRegistrationFormValidation();
+  const {
+    control,
+    handleSubmit,
+    formState: { errors, isValid },
+  } = useForm<FormValues>({
+    mode: 'onChange',
+    defaultValues: {
+      name: '',
+      email: '',
+      phone: '',
+      password: '',
+    },
+  });
 
-  function onRegister() {
+  const onRegister = (values: FormValues) => {
     dispatch(
       registerUser({
         name: values.name,
@@ -37,7 +56,7 @@ function RegistrationScreen() {
       }),
     );
     navigation.navigate(ScreenIdentifier.homeScreen as never);
-  }
+  };
 
   return (
     <ScreenContainer>
@@ -49,56 +68,93 @@ function RegistrationScreen() {
       >
         {t('createYourAccount')}
       </Text>
-      <CustomTextInput
-        label={t('name')}
-        placeholder={t('namePlaceholder')}
-        keyboardType="default"
-        autoCapitalize="words"
-        value={values.name}
-        onChangeText={text => setFieldValue('name', text)}
-        onBlur={() => handleBlur('name')}
-        error={touched.name ? errors.name : ''}
-      />
-      <CustomTextInput
-        label={t('email')}
-        placeholder={t('emailPlaceholder')}
-        keyboardType="email-address"
-        autoCapitalize="none"
-        autoCorrect={false}
-        value={values.email}
-        onChangeText={text => setFieldValue('email', text)}
-        onBlur={() => handleBlur('email')}
-        error={touched.email ? errors.email : ''}
-      />
-      <CustomTextInput
-        label={t('phoneNumber')}
-        placeholder={t('phoneNumberPlaceholder')}
-        keyboardType="phone-pad"
-        maxLength={10}
-        value={values.phone}
-        onChangeText={text => {
-          const onlyNumbers = text.replace(/[^0-9]/g, '');
-          setFieldValue('phone', onlyNumbers);
+
+      <Controller
+        control={control}
+        name="name"
+        rules={{
+          validate: validators.name,
         }}
-        onBlur={() => handleBlur('phone')}
-        error={touched.phone ? errors.phone : ''}
+        render={({ field: { onChange, onBlur, value } }) => (
+          <CustomTextInput
+            label={t('name')}
+            placeholder={t('namePlaceholder')}
+            keyboardType="default"
+            autoCapitalize="words"
+            value={value}
+            onChangeText={onChange}
+            onBlur={onBlur}
+            error={errors.name?.message}
+          />
+        )}
       />
-      <CustomTextInput
-        label={t('password')}
-        placeholder={t('passwordPlaceholder')}
-        secureTextEntry
-        keyboardType="default"
-        autoCapitalize="none"
-        autoCorrect={false}
-        isPassword={true}
-        value={values.password}
-        onChangeText={text => setFieldValue('password', text)}
-        onBlur={() => handleBlur('password')}
-        error={touched.password ? errors.password : ''}
+
+      <Controller
+        control={control}
+        name="email"
+        rules={{
+          validate: validators.email,
+        }}
+        render={({ field: { onChange, onBlur, value } }) => (
+          <CustomTextInput
+            label={t('email')}
+            placeholder={t('emailPlaceholder')}
+            keyboardType="email-address"
+            autoCapitalize="none"
+            value={value}
+            onChangeText={onChange}
+            onBlur={onBlur}
+            error={errors.email?.message}
+          />
+        )}
       />
+
+      <Controller
+        control={control}
+        name="phone"
+        rules={{
+          validate: validators.phone,
+        }}
+        render={({ field: { onChange, onBlur, value } }) => (
+          <CustomTextInput
+            label={t('phone')}
+            placeholder={t('phonePlaceholder')}
+            keyboardType="phone-pad"
+            maxLength={10}
+            value={value}
+            onChangeText={onChange}
+            onBlur={onBlur}
+            error={errors.phone?.message}
+          />
+        )}
+      />
+
+      <Controller
+        control={control}
+        name="password"
+        rules={{
+          validate: validators.password,
+        }}
+        render={({ field: { onChange, onBlur, value } }) => (
+          <CustomTextInput
+            label={t('password')}
+            placeholder={t('passwordPlaceholder')}
+            keyboardType="default"
+            secureTextEntry
+            autoCapitalize="none"
+            autoCorrect={false}
+            isPassword={true}
+            value={value}
+            onChangeText={onChange}
+            onBlur={onBlur}
+            error={errors.password?.message}
+          />
+        )}
+      />
+
       <CustomButton
         title={t('register')}
-        onPress={onRegister}
+        onPress={handleSubmit(onRegister)}
         disabled={!isValid}
       />
     </ScreenContainer>

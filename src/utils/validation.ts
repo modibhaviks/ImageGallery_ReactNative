@@ -31,3 +31,29 @@ export const getValidationError = (field: string, value: string) => {
       return '';
   }
 };
+
+export const validators = {
+  name: (value: string) => {
+    if (!value) return i18n.t('validation.nameRequired');
+    if (!nameRegex.test(value)) return i18n.t('validation.nameInvalid');
+    return true;
+  },
+
+  email: (value: string) => {
+    if (!value) return i18n.t('validation.emailRequired');
+    if (!emailRegex.test(value)) return i18n.t('validation.emailInvalid');
+    return true;
+  },
+
+  phone: (value: string) => {
+    if (!value) return i18n.t('validation.phoneRequired');
+    if (!phoneRegex.test(value)) return i18n.t('validation.phoneInvalid');
+    return true;
+  },
+
+  password: (value: string) => {
+    if (!value) return i18n.t('validation.passwordRequired');
+    if (!passwordRegex.test(value)) return i18n.t('validation.passwordMin');
+    return true;
+  },
+};

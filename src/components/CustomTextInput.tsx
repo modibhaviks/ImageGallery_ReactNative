@@ -29,6 +29,7 @@ const CustomTextInput: React.FC<CustomTextInputProps> = ({
   ...props
 }) => {
   const [showPassword, setShowPassword] = useState(false);
+  const shouldHidePassword = isPassword ? !showPassword : secureTextEntry;
 
   return (
     <View style={styles.container}>
@@ -47,7 +48,8 @@ const CustomTextInput: React.FC<CustomTextInputProps> = ({
           placeholderTextColor={TextStyles.inputPlaceholder.color}
           onBlur={onBlur}
           onFocus={onFocus}
-          secureTextEntry={isPassword && !showPassword}
+          value={props.value ?? ''}
+          secureTextEntry={shouldHidePassword}
           {...props}
         />
 
